@@ -1,0 +1,125 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.huir.android.activity.MainActivity" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <!-- 用户名输入框 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp" >
+            <TextView
+                android:id="@+id/text_reg_login_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/reg_user"
+                android:textColor="#f7e1a0"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/edit_reg_login_name"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:ems="10" />
+        </TableRow>
+        
+        <!-- 用户名输入框校验 -->
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/text_reg_check_userName"
+                android:paddingLeft="90dp"
+                android:textColor="#ff0000"
+                android:text="@string/reg_check_user"
+                android:textSize="12sp"
+               />
+        </TableRow>
+        
+        <!-- 密码输入框 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp" >
+            <TextView
+                android:id="@+id/text_reg_login_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/reg_pwd"
+                android:textColor="#f7e1a0"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/edit_reg_login_pwd"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:inputType="textPassword" />
+        </TableRow>
+        
+        <!-- 密码输入框校验 -->
+        <TableRow>
+            <TextView
+                android:id="@+id/text_reg_check_userPwd"
+                android:textColor="#ff0000"
+                android:paddingLeft="90dp"
+                android:textSize="12sp"
+                android:text="输入密码"
+                 />
+        </TableRow>
+        
+         <!-- 再次确认密码输入框 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp" >
+            <TextView
+                android:id="@+id/text_reg_confirmLogin_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/reg_confirm_pwd"
+                android:textColor="#f7e1a0"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/edit_reg_confirm_pwd"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:inputType="textPassword" />
+        </TableRow>
+        
+        <!-- 再次确认密码输入框校验 -->
+        <TableRow>
+            <TextView
+                android:id="@+id/text_reg_check_confirm_userPwd"
+                android:textColor="#ff0000"
+                android:paddingLeft="90dp"
+                android:textSize="12sp"
+                android:text="@string/reg_confirm_check_pwd"
+                 />
+        </TableRow>
+
+        <!-- 注册按钮 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center" >
+            <Button
+                android:id="@+id/btn_reg_user"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:background="#3c71c7"
+                android:text="@string/btn_reg"
+                android:textSize="20sp" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

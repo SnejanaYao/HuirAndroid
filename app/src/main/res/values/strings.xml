@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">HuirAndroid</string>
+	<string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+	
+	<!-- 聊天界面  按钮(activity_chat.xml)-->    
+    <string name="chat_left">左边</string>
+    <string name="chat_right">右边</string>
+    <string name="chat_down">下载</string>
+    
+    <!-- 录音按钮文字状态 -->
+    <string name="str_recorder_normal">按住 说话</string>
+    <string name="str_recorder_recoding">松开 结束</string>
+    <string name="str_recorder_want_cancle">松开手指 取消发送</string>
+    <string name="str_recorder_notice_cancle">手指上滑,取消发送</string>
+    <string name="str_recorder_notice_cantsend">松开手指,取消发送</string>
+    <string name="str_recorder_too_short">录音时间太短</string>
+    
+    <!-- 文件下载文字状态 -->
+    <string name="str_file_downloading">正在下载</string>
+    <string name="str_file_downSuccess">下载成功</string>
+    <string name="str_file_downFail">下载失败</string>
+    <!-- 文件发送文字状态 -->
+    <string name="str_file_sending">正在发送</string>
+    <string name="str_file_sendSuccess">发送成功</string>
+    <string name="str_file_sendFail">发送失败</string>
+   	<!-- 标题头文字 -->
+    <string name="str_bar_chat_user">用户</string>
+    <string name="str_bar_chat_info">详细信息</string>
+    <string name="str_bar_main_tile">惠瑞</string>
+    <string name="str_bar_chat_group_list">成员列表</string>
+    <!-- 底部导航栏 -->
+    <string name="str_navigation_chat">聊天</string>
+    <string name="str_navigation_friend">联系人</string>
+    <string name="str_navigation_app">应用</string>
+    <string name="str_navigation_settings">我</string>
+    
+    <string name="str_fri_department">我的部门</string>
+    <string name="str_fri_addresslist">通讯录</string>
+    <string name="str_fri_group">个人群组</string>
+    <string name="str_fri_company">企业框架</string>
+    <string name="str_fri_list_company_name">长沙式惠瑞生物科技有限公司</string>
+    
+    <string name="str_app_email">我的邮件</string>
+    <string name="str_app_message">我的消息</string>
+    <string name="str_app_found">找群找人</string>
+    <!--  -->
+    <string name="str_message_broad">广播消息</string>
+    <string name="str_message_system">系统消息</string>
+    <string name="str_find_group">找群</string>
+    <string name="str_find_people">找人</string>
+    
+    <string name="str_set_check">检查版本</string>
+    <string name="str_set_notice">通知提醒</string>
+    <string name="str_set_collection">个人收藏</string>
+    <string name="str_set_safe">隐私与安全</string>
+    <string name="str_set_exit">退出登录</string>
+    <string name="str_set_log_off">注销登陆</string>
+    <string name="str_set_exit_log_out">退出后不会删除任何历史数据，下次登录依然可以使用本帐号</string>
+    <string name="str_set_exit_log_off">注销或更换其它帐号登录</string>
+    <!-- 个人信息 -->
+    <string name="str_personal_title">个人信息</string>
+    <string name="str_personal_accounts">帐号: </string>
+    <string name="str_personal_number">编号: </string>
+    <string name="str_personal_sign">签名</string>
+    <string name="str_personal_main_page">主页</string>
+    <string name="str_personal_gender">性别</string>
+    <string name="str_personal_born">生日</string>
+    <string name="str_personal_area">地区</string>
+    <string name="str_personal_zipcode">邮编</string>
+    <string name="str_personal_tel">电话</string>
+    <string name="str_personal_mobile">手机</string>
+    <string name="str_personal_email">邮件</string>
+    <string name="str_personal_address">地址</string>
+    <string name="str_born_yr">年</string>
+    <string name="str_born_mth">月</string>
+    <string name="str_born_day">日</string>
+    
+    <!-- 注册界面 (activity_reg.xml) -->
+    <string name="reg_user">用户名:</string>
+    <string name="reg_check_user">输入用户名</string>
+    <string name="reg_pwd">密    码:</string>
+    <string name="reg_check_pwd">输入密码</string>
+    <string name="reg_confirm_pwd">二次确认:	</string>
+    <string name="reg_confirm_check_pwd">二次输入</string>
+    <string name="btn_reg">登陆</string>
+    
+    <string name="str_sure">确定</string>
+    <string name="str_cancle">取消</string>
+    <string name="str_return">返回</string>
+    
+    <drawable name="btn_normal_blue">#00BFFF</drawable> <!-- 返回键 点击 -->
+    <drawable name="DarkSlateBlue">#483D8B</drawable>
+</resources>

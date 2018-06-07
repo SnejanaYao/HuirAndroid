@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.huir.test">
+
+
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!-- 授予sd卡写入操作 -->
+    <uses-permission android:name="android.permission.INTERNET"/> <!-- 授予上网权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 开启录音 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 读取文件 -->
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="com.huir.android.activity.WelcomeActity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.huir.android.activity.MainActivity"> </activity><!-- 登录界面 -->
+
+        <activity android:name="com.huir.android.activity.RegActivity"> </activity><!-- 注册界面 -->
+
+        <activity android:name="com.huir.android.chat.ChatActivity"> </activity> <!-- 聊天界面 -->
+        <activity android:name="com.huir.android.chat.GroupChatActivity"> </activity> <!-- 群组聊天成员列表 -->
+
+        <activity android:name="com.huir.android.tab.TabActivity"> </activity> <!-- 主界面 -->
+
+        <activity android:name="com.huir.android.tab.app.AppEmailActivity"> </activity><!-- 显示 我的邮件界面 -->
+        <activity android:name="com.huir.android.tab.app.AppMessageActivity"> </activity><!-- 显示 我的消息界面 -->
+        <activity android:name="com.huir.android.tab.app.AppFindActivity"> </activity><!-- 显示 找人找群界面 -->
+
+        <activity android:name="com.huir.android.tab.setting.SettingActivity"> </activity> <!-- 个人信息主界面 -->
+        <activity android:name="com.huir.android.tab.setting.ChangeInfoActivity"  android:theme="@android:style/Theme.Holo.Light.NoActionBar"> </activity> <!-- 修改个人信息界面 -->
+        <activity android:name="com.huir.android.tab.setting.SetNotifyActivity"> </activity><!-- 设置 通知提醒 界面-->
+        <activity android:name="com.huir.android.tab.setting.SetCollectActivity"> </activity><!-- 个人收藏 界面-->
+
+        <service android:name="com.huir.android.net.NetService"> </service> <!-- 通信服务 -->
+    </application>
+
+</manifest>

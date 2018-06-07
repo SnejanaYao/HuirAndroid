@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@drawable/bottom_top_line1"
+    android:orientation="horizontal" >
+    
+    
+    
+    <LinearLayout 
+        android:id="@+id/navigation_chat"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_height="fill_parent">
+        
+        <ImageButton 
+            android:id="@+id/tab_navigation_chat"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@color/colorWhite"
+			android:clickable="false"
+			android:src="@drawable/chat_iamge_press"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGray"
+            android:textSize="16sp"
+            android:text="@string/str_navigation_chat" 
+            />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/navigation_friend"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_height="fill_parent">
+        
+        <ImageButton 
+            android:id="@+id/tab_navigation_friend"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@color/colorWhite"
+			android:clickable="false"
+			android:src="@drawable/friend_iamge_normal"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGray"
+            android:textSize="16sp"
+            android:text="@string/str_navigation_friend" 
+            />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/navigation_app"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_height="fill_parent">
+        
+        <ImageButton 
+            android:id="@+id/tab_navigation_app"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@color/colorWhite"
+			android:clickable="false"
+			android:src="@drawable/app_iamge_normal"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGray"
+            android:textSize="16sp"
+            android:text="@string/str_navigation_app" 
+            />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/navigation_settings"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_height="fill_parent">
+        
+        <ImageButton 
+            android:id="@+id/tab_navigation_settings"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@color/colorWhite"
+			android:clickable="false"
+			android:src="@drawable/settings_image_normal"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/colorGray"
+            android:text="@string/str_navigation_settings" 
+            />
+    </LinearLayout>
+    
+    
+
+</LinearLayout>

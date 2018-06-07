@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.huir.android.activity.MainActivity" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <!-- 用户名输入框 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp" >
+            <TextView
+                android:id="@+id/text_login_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="用户名:"
+                android:textColor="#0000CC"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/edit_login_name"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:ems="10" />
+        </TableRow>
+        
+        <!-- 用户名输入框校验 -->
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/text_check_userName"
+                android:paddingLeft="90dp"
+                android:textColor="#ff0000"
+                android:textSize="12sp"
+               />
+        </TableRow>
+        
+        <!-- 密码输入框 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp" >
+            <TextView
+                android:id="@+id/text_login_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="密    码:	"
+                android:textColor="#0000CC"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/edit_login_pwd"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:inputType="textPassword" />
+        </TableRow>
+        
+        <!-- 密码输入框校验 -->
+        <TableRow>
+            <TextView
+                android:id="@+id/text_check_userPwd"
+                android:textColor="#ff0000"
+                android:paddingLeft="90dp"
+                android:textSize="12sp"
+                 />
+        </TableRow>
+
+        <!-- 登录按钮 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center" >
+            <Button
+                android:id="@+id/btn_user_login"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:background="#33FF99"
+                android:text="登陆"
+                android:textSize="20sp" />
+        </TableRow>
+        
+        <TableRow >
+            <TextView
+                android:id="@+id/text_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:paddingLeft="90dp"
+                android:layout_weight="2"
+                android:text="注册"
+                android:textColor="#0000CC"
+                android:textSize="15sp" /> 
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

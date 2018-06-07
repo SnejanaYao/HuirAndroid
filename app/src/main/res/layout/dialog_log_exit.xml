@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ 	    android:id="@+id/log_exit_layout"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:gravity="center"
+    	android:orientation="vertical" >
+    	
+<LinearLayout 
+    android:layout_width="320dp"
+    android:layout_gravity="center"
+    android:layout_height="220dp"
+    android:orientation="vertical">
+    
+     <RelativeLayout
+        android:id="@+id/exit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:background="@color/colorWhite"
+        android:gravity="right"
+        android:layout_weight="1"
+        android:paddingBottom="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp" >
+
+        <ImageView
+            android:id="@+id/icon_log_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@drawable/logout" />
+
+        <TextView
+            android:id="@+id/name_log_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/icon_log_out"
+            android:layout_toRightOf="@id/icon_log_out"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/str_set_exit"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_log_out"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/name_log_out"
+            android:layout_below="@id/name_log_out"
+            android:paddingLeft="10dp"
+            android:text="@string/str_set_exit_log_out"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/colorBorderLine" >
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/logoff_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:background="@color/colorWhite"
+        android:gravity="right"
+        android:layout_weight="1"
+        android:paddingBottom="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp" >
+
+       <ImageView
+            android:id="@+id/icon_log_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@drawable/logoff" />
+
+        <TextView
+            android:id="@+id/name_log_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/icon_log_off"
+            android:layout_toRightOf="@id/icon_log_off"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/str_set_log_off"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_log_off"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/name_log_off"
+            android:layout_below="@id/name_log_off"
+            android:paddingLeft="10dp"
+            android:text="@string/str_set_exit_log_off"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp" />
+    </RelativeLayout>
+    
+</LinearLayout>
+   
+</LinearLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:id="@+id/depaterment_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        
+        <ImageButton 
+            android:id="@+id/top_tree_iamge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tree_closed"
+            android:background="#FFFFFFFF"
+            android:layout_marginLeft="10dp"
+            />
+        
+        <TextView 
+            android:id="@+id/top_department_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/top_tree_iamge"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="2dp"
+            android:text="行政部"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/top_department_name"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            android:text="[5/9]"/>
+        
+        
+        <ImageButton 
+            android:id="@+id/top_department_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/department2"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorWhite"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            />
+        
+        
+        <ImageButton 
+            android:id="@+id/top_department_talk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/department1"
+            android:layout_marginTop="9dp"
+            android:layout_toLeftOf="@id/top_department_set"
+            android:background="@color/colorWhite"
+            android:layout_marginLeft="10dp"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

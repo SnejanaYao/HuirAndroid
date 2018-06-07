@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@color/colorWhite"
+    android:orientation="horizontal" >
+    
+    <LinearLayout 
+        android:id="@+id/message_broad_layout"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:background="@drawable/top_line_blue"
+        android:layout_height="fill_parent">
+        
+        <TextView
+            android:id="@+id/message_broad_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/colorBlue"
+            android:text="@string/str_message_broad" 
+            />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/message_system_layout"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:layout_height="fill_parent">
+        
+        <TextView
+            android:id="@+id/message_system_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:text="@string/str_message_system" 
+            />
+    </LinearLayout>
+</LinearLayout>

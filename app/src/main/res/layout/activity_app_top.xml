@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="#FFFFFFFF"
+    android:orientation="horizontal" >
+    
+    <LinearLayout 
+        android:id="@+id/app_top_department"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:layout_height="fill_parent">
+        
+        <ImageButton 
+            android:id="@+id/app_top_f1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="#FFFFFFFF"
+			android:clickable="false"
+			android:src="@drawable/f1"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:text="@string/str_fri_department" 
+            />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/app_top_adresslist"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:layout_height="fill_parent">
+        
+        <ImageButton 
+            android:id="@+id/app_top_f2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="#FFFFFFFF"
+			android:clickable="false"
+			android:src="@drawable/f2"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:text="@string/str_fri_addresslist" 
+            />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/app_top_group"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:layout_height="fill_parent">
+        
+        <ImageButton 
+            android:id="@+id/app_top_f3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="#FFFFFFFF"
+			android:clickable="false"
+			android:src="@drawable/f3"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGray"
+            android:textSize="14sp"
+            android:text="@string/str_fri_group" 
+            />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/app_top_company"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:layout_height="fill_parent">
+        
+        <ImageButton 
+            android:id="@+id/app_top_f4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="#FFFFFFFF"
+			android:clickable="false"
+			android:src="@drawable/f4"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/colorGray"
+            android:text="@string/str_fri_company" 
+            />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+        
+        <RelativeLayout 
+            android:id="@+id/myemail_layout"
+            android:layout_width="fill_parent"
+            android:background="@drawable/bottom_top_line1"
+            android:layout_height="wrap_content">
+            
+        <ImageView   
+            android:id="@+id/app_email_image"
+        	android:layout_width="55dp"
+        	android:layout_height="55dp"
+        	android:padding="5dp"
+        	android:src="@drawable/default_app"/>
+        
+        
+        <TextView 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_toRightOf="@id/app_email_image"
+        	android:layout_marginLeft="15dp"
+        	android:layout_marginTop="15dp"
+        	android:textSize="16sp"
+        	android:textStyle="bold"
+        	android:text="@string/str_app_email"/>
+        </RelativeLayout>
+        
+         <RelativeLayout 
+            android:id="@+id/mymessage_layout"
+            android:layout_width="fill_parent"
+            android:background="@drawable/bottom_top_line1"
+            android:layout_height="wrap_content">
+            
+        <ImageView
+            android:id="@+id/app_message_image"   
+        	android:layout_width="55dp"
+        	android:layout_height="55dp"
+        	android:padding="5dp"
+        	android:src="@drawable/default_app"/>
+        
+        
+        <TextView 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_toRightOf="@id/app_message_image"
+        	android:layout_marginLeft="15dp"
+        	android:layout_marginTop="15dp"
+        	android:textSize="16sp"
+        	android:textStyle="bold"
+        	android:text="@string/str_app_message"/>
+        </RelativeLayout>
+        
+          <RelativeLayout
+            android:id="@+id/find_person_layout" 
+            android:layout_width="fill_parent"
+            android:background="@drawable/bottom_top_line1"
+            android:layout_height="wrap_content">
+            
+        <ImageView
+            android:id="@+id/app_found_image"   
+        	android:layout_width="55dp"
+        	android:layout_height="55dp"
+        	android:padding="5dp"
+        	android:src="@drawable/default_app"/>
+        
+        
+        <TextView 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_toRightOf="@id/app_found_image"
+        	android:layout_marginLeft="15dp"
+        	android:layout_marginTop="15dp"
+        	android:textSize="16sp"
+        	android:textStyle="bold"
+        	android:text="@string/str_app_found"/>
+        </RelativeLayout>
+       
+        
+    
+     
+    
+</LinearLayout>
