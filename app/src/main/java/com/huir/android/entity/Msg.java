@@ -1,5 +1,7 @@
 package com.huir.android.entity;
 
+import android.graphics.Bitmap;
+
 public class Msg {
    private String msg;
    private int  type;
@@ -9,6 +11,8 @@ public class Msg {
    private int second; //秒数
    private boolean isPlayed;//是否已经播放过
    private boolean isPlaying;//是否正在播放
+
+    private Bitmap bitmap;
    
    
    
@@ -33,6 +37,14 @@ public class Msg {
 		this.isPlayed = isPlayed;
 		this.isPlaying = isPlaying;
 	}
+
+    public Bitmap getBitMap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap){
+	    this.bitmap = bitmap;
+    }
 
 	public String getId() {
 		return id;

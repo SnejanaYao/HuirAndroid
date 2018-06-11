@@ -28,8 +28,8 @@ public class ChangeInfoActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//设置窗口没有标题栏  
-		if(VERSION.SDK_INT>= VERSION_CODES.KITKAT) {  
-	          getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);  //透明状态栏  
+		if(VERSION.SDK_INT>= VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);  //透明状态栏
 	          getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);   //透明导航栏  
 	     }
 		View contentView = getLayoutInflater().inflate(R.layout.change_personal_info, null);

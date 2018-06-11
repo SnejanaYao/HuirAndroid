@@ -1,13 +1,9 @@
 package com.huir.android.chat;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import com.huir.test.R;
 import com.huir.android.chat.download.DownloadFile;
@@ -19,18 +15,16 @@ import com.huir.android.record.AudioRecorderButton.OnAudioListener;
 import com.huir.android.tool.KeyboardUtil;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -39,25 +33,20 @@ import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 
 @SuppressLint("NewApi")
 public class ChatActivity extends Activity implements OnClickListener{
@@ -70,6 +59,7 @@ public class ChatActivity extends Activity implements OnClickListener{
 	private EditText et_meg;
 	private Button left,right,download,info,returnBtn;
 	private TextView title;
+	private ImageView image_show ;
 	
 	private GradientDrawable gd;
 	private ListView clist;
@@ -112,7 +102,9 @@ public class ChatActivity extends Activity implements OnClickListener{
 		et_meg.addTextChangedListener(new changeBtn());
 		
 		left=(Button) findViewById(R.id.btn_left);
-		left.setOnClickListener(this);
+		if(left !=null){
+            left.setOnClickListener(this);
+        }
 		
 		right= (Button) findViewById(R.id.btn_right);
 		right.setOnClickListener(this);
@@ -129,7 +121,7 @@ public class ChatActivity extends Activity implements OnClickListener{
 		clist = (ListView) findViewById(R.id.chatList);
 		chatViewAdapter = new ChatViewAdapter(datas,ChatActivity.this);
 		clist.setAdapter(chatViewAdapter);
-		
+
 		record = (AudioRecorderButton)findViewById(R.id.btn_record);
 		record.setOnAudioListener(new OnAudioListener(){ //设置录音监听
 			@Override
@@ -164,7 +156,25 @@ public class ChatActivity extends Activity implements OnClickListener{
 					 gd.setStroke(2, unstrokeColor);
 					 left.setBackgroundDrawable(gd);
 			    }
-			}
+			}else{
+                chatViewAdapter.addDataToAdapter(new Msg(msg, 4));
+                chatViewAdapter.notifyDataSetChanged();
+                clist.smoothScrollToPosition(clist.getCount() - 1);
+                et_meg.setText("");
+                chatViewAdapter.setCallBackClickListener(new ChatViewAdapter.PhotoViewCallBackClickListener() {
+                    @Override
+                    public void click(View view, PhotoView photoView,ImageView imageView,Bitmap bitmap) {
+                        switch (v.getId()){
+                           /* case R.id.photo_view_click_show:
+                                photoView.setVisibility(View.VISIBLE);
+                                PhotoViewAttacher photoViewAttacher =new PhotoViewAttacher(photoView);
+                                photoView.setImageBitmap(bitmap);
+                                photoViewAttacher.update();
+                                break;*/
+                        }
+                    }
+                });
+            }
 			break;
 		case R.id.btn_right:
 		  if(!msg.isEmpty()) {

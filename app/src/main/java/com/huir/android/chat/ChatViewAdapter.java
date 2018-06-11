@@ -1,16 +1,23 @@
 package com.huir.android.chat;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.huir.android.chat.download.ImageAsy;
+import android.view.View.OnClickListener;
 import com.huir.test.R;
 import com.huir.android.entity.Msg;
 import com.huir.android.record.MediaManager;
 import com.huir.android.tool.CommonsUtils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +27,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import uk.co.senab.photoview.PhotoView;
 
-public class ChatViewAdapter extends BaseAdapter {
+
+public class ChatViewAdapter extends BaseAdapter implements OnClickListener {
 	private ViewHolder viewHolder;
 	private List<Msg> datas = new ArrayList<Msg>();
 	private Context context;
 	private int pos = -1;// 标记当前录音索引，默认没有播放任何一个 -1
 	private AnimationDrawable animation; //动画
 	public List<AnimationDrawable> animationDrawables;
-	
+	private PhotoViewCallBackClickListener photoViewCallBackClickListener;
+	private Bitmap bitmap;
+
 	public ChatViewAdapter() {
 	}
 	
@@ -37,6 +48,11 @@ public class ChatViewAdapter extends BaseAdapter {
 		this.datas = datas;
 		this.context = context;
 	}
+
+    public ChatViewAdapter(Context context) {
+        super();
+        this.context = context;
+    }
 
 	//给adapter添加数据
 	public void addDataToAdapter(Msg e) {
@@ -119,7 +135,16 @@ public class ChatViewAdapter extends BaseAdapter {
 					});
 	            }
 	        });
-		}
+		}else if(type==4){
+		    viewHolder.imageLayout.setVisibility(View.VISIBLE);
+            viewHolder.voiceLeft.setVisibility(View.INVISIBLE);
+            viewHolder.left.setVisibility(View.INVISIBLE);
+            viewHolder.right.setVisibility(View.INVISIBLE);
+            ImageAsy imageAsy = new ImageAsy(context,viewHolder.image_show,viewHolder.photoShow);
+            imageAsy.execute();
+            bitmap = imageAsy.getBitmap();
+            viewHolder.photoShow.setOnClickListener(this);
+        }
 		return convertView;
 	}
 	
@@ -127,7 +152,7 @@ public class ChatViewAdapter extends BaseAdapter {
        viewHolder.left.setVisibility(View.VISIBLE);
        viewHolder.right.setVisibility(View.INVISIBLE);
        viewHolder.voiceLeft.setVisibility(View.INVISIBLE);
-       
+       viewHolder.imageLayout.setVisibility(View.INVISIBLE);
        viewHolder.text_left.setText(msg);//发送消息
 	}
 	
@@ -135,14 +160,16 @@ public class ChatViewAdapter extends BaseAdapter {
 	   viewHolder.right.setVisibility(View.VISIBLE);
        viewHolder.left.setVisibility(View.INVISIBLE);
        viewHolder.voiceLeft.setVisibility(View.INVISIBLE);
+       viewHolder.imageLayout.setVisibility(View.INVISIBLE);
        
        viewHolder.text_right.setText(msg); //发送消息
 	}
 	
 	private void l_voice(int second,boolean isPlayed) {
+        viewHolder.voiceLeft.setVisibility(View.VISIBLE);
 		viewHolder.left.setVisibility(View.INVISIBLE);
 	    viewHolder.right.setVisibility(View.INVISIBLE);
-	    viewHolder.voiceLeft.setVisibility(View.VISIBLE);
+        viewHolder.imageLayout.setVisibility(View.INVISIBLE);
 	    viewHolder.vc_left.setText(second<=0 ? 1 +" ''" : second+" '' ");
 	   if(isPlayed) { //未读与已读的红点状态
 		   viewHolder.chat_left_red.setVisibility(View.GONE);
@@ -164,7 +191,11 @@ public class ChatViewAdapter extends BaseAdapter {
        public ImageView chat_left_voiceLine; //语音条
        public LinearLayout voiceLeft; //左侧语音发送
        public LinearLayout sign; //语音标志
-       
+
+      public LinearLayout imageLayout;
+      public ImageView image_show;
+      public PhotoView photoShow;
+
        public ViewHolder(View rootView) {
        	    this.rootView = rootView;
             this.text_left = (TextView) rootView.findViewById(R.id.text_left);
@@ -178,57 +209,40 @@ public class ChatViewAdapter extends BaseAdapter {
             this.chat_left_red=(ImageView) rootView.findViewById(R.id.chat_left_red);
             this.chat_left_voiceLine =(ImageView) rootView.findViewById(R.id.chat_left_voiceLine);
             this.sign = (LinearLayout)rootView.findViewById(R.id.chat_left_singer);
+
+            this.imageLayout = (LinearLayout)rootView.findViewById(R.id.image_left_layout);
+            this.photoShow = (PhotoView) rootView.findViewById(R.id.chat_image_show);
        }
- 	}
+
+ }
+
+    /**
+     * 接口回调
+     * @author huir316
+     *
+     */
+    public interface PhotoViewCallBackClickListener {
+        void click(View view,PhotoView photoView,ImageView ImageView,Bitmap bitmap);
+    };
+
+    public void setCallBackClickListener(PhotoViewCallBackClickListener photoViewCallBackClickListener) {
+        if(photoViewCallBackClickListener !=null) {
+            this.photoViewCallBackClickListener = photoViewCallBackClickListener;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(photoViewCallBackClickListener !=null){
+            photoViewCallBackClickListener.click(v,viewHolder.photoShow, viewHolder.image_show,bitmap);
+        }
+    }
 }
 
 
 
 
-/*	*//**
- * 点击事件
- * @author huir316
- *
- *//*
-class onClick implements OnClickListener{
-
-	@Override
-	public void onClick(View v) {
-		String msg = et_meg.getText().toString().trim();
-		switch (v.getId()) {
-		case R.id.btn_left:
-			if(!msg.isEmpty()) {
-				chatViewAdapter.addDataToAdapter(new Msg(msg, 1));
-				chatViewAdapter.notifyDataSetChanged();
-			    clist.smoothScrollToPosition(clist.getCount() - 1);
-			    et_meg.setText("");
-
-			    if(et_meg.getText().toString().equals("")) {
-			    	 gd = new GradientDrawable();//创建drawable
-					 gd.setColor(unfillColor);
-					 gd.setCornerRadius(50);
-					 gd.setStroke(2, unstrokeColor);
-					 left.setBackgroundDrawable(gd);
-			    }
-			}
-			break;
-		case R.id.btn_right:
-		  if(!msg.isEmpty()) {
-		    chatViewAdapter.addDataToAdapter(new Msg(msg, 2));
-			chatViewAdapter.notifyDataSetChanged();
-		    clist.smoothScrollToPosition(clist.getCount() - 1);
-		    et_meg.setText("");
-		    
-		    if(et_meg.getText().toString().equals("")) {
-		    	gd= new GradientDrawable();//创建drawable
-		    	gd.setColor(unfillColor);
-		    	gd.setCornerRadius(50);
-		    	gd.setStroke(2, unstrokeColor);
-			    right.setBackgroundDrawable(gd);
-		    	}
-			}
-		    
-			break;
+/*
 		case R.id.btn_download:
 			//文件下载  (downLoadManager)
 			String url= "http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@900w_1l_2o_100sh.jpg";//下载地址
@@ -260,5 +274,8 @@ class onClick implements OnClickListener{
 	}
 	
 }*/
+
+
+
 
 
