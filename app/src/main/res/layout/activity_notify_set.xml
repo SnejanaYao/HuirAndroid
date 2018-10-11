@@ -36,8 +36,127 @@
             android:textColor="@color/colorWhite"
             android:textSize="15sp" />
     </RelativeLayout>
-    
-    
+
+    <RelativeLayout
+        android:id="@+id/notify_receviced"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/bottom_top_line1"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:id="@+id/notify_receviced_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="3dp"
+            android:textSize="15dp"
+            android:text="@string/str_notice_receviced"
+            />
+        <Switch
+            android:id="@+id/notify_receviced_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="250dp"
+            android:layout_alignParentRight="true"
+            android:thumb="@drawable/switch_ios_thumb"
+            android:track="@drawable/selector_switch_ios_track"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/notify_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/bottom_top_line1"
+        >
+
+        <TextView
+            android:id="@+id/notify_details_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="3dp"
+            android:textSize="15dp"
+            android:text="@string/str_notice_details"
+            />
+        <Switch
+            android:id="@+id/notify_details_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="250dp"
+            android:layout_alignParentRight="true"
+            android:thumb="@drawable/switch_ios_thumb"
+            android:track="@drawable/selector_switch_ios_track"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/notify_sound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/bottom_top_line1"
+        >
+
+        <TextView
+            android:id="@+id/notify_sound_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="3dp"
+            android:textSize="15dp"
+            android:text="@string/str_notice_sound"
+            />
+        <Switch
+            android:id="@+id/notify_sound_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="250dp"
+            android:layout_alignParentRight="true"
+            android:thumb="@drawable/switch_ios_thumb"
+            android:track="@drawable/selector_switch_ios_track"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/notify_shock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/bottom_top_line1"
+        >
+
+        <TextView
+            android:id="@+id/notify_shock_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="3dp"
+            android:textSize="15dp"
+            android:text="@string/str_notice_shock"
+            />
+        <Switch
+            android:id="@+id/notify_shock_swicth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="250dp"
+            android:layout_alignParentRight="true"
+            android:thumb="@drawable/switch_ios_thumb"
+            android:track="@drawable/selector_switch_ios_track"
+            />
+    </RelativeLayout>
     
     
 </LinearLayout>

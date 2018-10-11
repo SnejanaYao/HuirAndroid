@@ -1,4 +1,4 @@
-package com.huir.android.tab;
+package com.huir.android.tab.setting.dialog;
 
 import com.huir.test.R;
 

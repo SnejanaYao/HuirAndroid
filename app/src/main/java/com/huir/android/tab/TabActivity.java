@@ -3,10 +3,14 @@ package com.huir.android.tab;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.huir.android.tab.adapter.DeExpandableAdapter;
+import com.huir.android.tab.adapter.ShowUsersAdapter;
+import com.huir.android.tab.setting.dialog.ExitDialogManager;
+import com.huir.android.tool.CommonsUtils;
 import com.huir.test.R;
 import com.huir.android.chat.ChatActivity;
 import com.huir.android.entity.UserShow;
-import com.huir.android.tab.ExitDialogManager.CallBackClickListener;
+import com.huir.android.tab.setting.dialog.ExitDialogManager.CallBackClickListener;
 import com.huir.android.tab.app.AppEmailActivity;
 import com.huir.android.tab.app.AppFindActivity;
 import com.huir.android.tab.app.AppMessageActivity;
@@ -21,6 +25,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +33,7 @@ import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +55,11 @@ import android.widget.Toast;
 
 public class TabActivity extends Activity implements OnClickListener,OnItemClickListener,OnChildClickListener,CallBackClickListener{
 	private ViewPager viewPager; //viewPager
-	private List<View> vlist = new ArrayList<View>(); //页面的集合
-	private List<UserShow> ulist = new ArrayList<UserShow>();
+	private List<View> vList = new ArrayList<View>(); //页面的集合
 	private ExpandableListView dpList;
 	
-	private ShowUsersAdapater sAdapater;//message页面listview
-	private DeExpandableAdapater deAdapater;
+	private ShowUsersAdapter sAdapter;//message页面listView
+	private DeExpandableAdapter deAdapter;
 	
 	private ExitDialogManager dialogManager;
 	
@@ -84,16 +89,21 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);//设置窗口没有标题栏
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);  //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);   //透明导航栏
-        }
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//设置窗口没有标题栏
+		config();
 		View contentView = getLayoutInflater().inflate(R.layout.activity_main_tab, null);
 		setContentView(contentView);
+        MediaRecorder mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //判断是否有录音权限
 		new KeyboardUtil(this, contentView); 
 		initView();
 		initEvents();
+	}
+
+	private void config(){
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);  //透明状态栏
+        }
 	}
 	
 	private void initEvents() {
@@ -158,22 +168,22 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 		View friend = inflater.inflate(R.layout.tab_friend, null);
 		View app = inflater.inflate(R.layout.tab_app, null);
 		View settings = inflater.inflate(R.layout.tab_settings, null);
-		vlist.add(message);
-		vlist.add(friend);
-		vlist.add(app);
-		vlist.add(settings);
+        vList.add(message);
+        vList.add(friend);
+        vList.add(app);
+        vList.add(settings);
 		
 		/**页面适配器**/
 		pageAdapter = new PagerAdapter() {
 			@Override
 			public void destroyItem(ViewGroup container, int position, Object object) {
-				container.removeView(vlist.get(position));
+				container.removeView(vList.get(position));
 			}
 		
 			
 			@Override
 			public Object instantiateItem(ViewGroup container, int position) {
-				View view = vlist.get(position);
+				View view = vList.get(position);
 				container.addView(view);
 				return view;
 			}
@@ -185,7 +195,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			
 			@Override
 			public int getCount() {
-				return vlist.size();
+				return vList.size();
 			}
 		};
 		
@@ -205,11 +215,11 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 	 * 联系人的列表初始化与装载
 	 */
 	private void messageInitAdapert(View message) {
-		sAdapater = new ShowUsersAdapater(ulist, message.getContext());
+		sAdapter = new ShowUsersAdapter(message.getContext());
 		listChat = (ListView) message.findViewById(R.id.user_show_chat_list);
-		listChat.setAdapter(sAdapater);
+		listChat.setAdapter(sAdapter);
 		//TODO 测试联系人列表
-		sAdapater.addDataToAdapter(new UserShow(0, 0, "用户名昵称", null, "", "10:01"));
+		sAdapter.addDataToAdapter(new UserShow(0, 0, "用户名昵称", null, "", "10:01"));
 	    listChat.setOnItemClickListener(this);
 	}
 	
@@ -219,7 +229,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 	private LinearLayout group;
 	private LinearLayout company;
 	private TextView textListName;
-	private ImageView item_group_head;
+	private ImageView itemGroupHead;
 	
 	private void fInitAdapater(View friend) {
         department = (LinearLayout)friend.findViewById(R.id.app_top_department);
@@ -227,7 +237,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
         group = (LinearLayout)friend.findViewById(R.id.app_top_group);
         company = (LinearLayout)friend.findViewById(R.id.app_top_company);
         textListName = (TextView)friend.findViewById(R.id.text_listname);
-        item_group_head = (ImageView) friend.findViewById(R.id.item_group_head);
+        itemGroupHead = (ImageView) friend.findViewById(R.id.item_group_head);
 		
 		department.setBackgroundResource(R.drawable.top_line_blue); //(department)初始化界面bottom底色
 		
@@ -235,9 +245,9 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 		adresslist.setOnClickListener(this);
 		group.setOnClickListener(this);
 		company.setOnClickListener(this);
-		deAdapater = new DeExpandableAdapater(friend.getContext());
+		deAdapter = new DeExpandableAdapter(friend.getContext());
 		dpList = (ExpandableListView)friend.findViewById(R.id.list_department);
-		dpList.setAdapter(deAdapater);
+		dpList.setAdapter(deAdapter);
 		dpList.setOnChildClickListener(this);
 		
 	}
@@ -308,6 +318,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			adresslist.setBackgroundResource(R.drawable.bottom_top_line1);
 			group.setBackgroundResource(R.drawable.bottom_top_line1);
 			company.setBackgroundResource(R.drawable.bottom_line1);//设置背景底线变色
+            friImage.setImageResource(R.drawable.friend_iamge_press);
 			textListName.setText(R.string.str_fri_department);
 			break;
 		case R.id.app_top_adresslist:
@@ -315,6 +326,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			department.setBackgroundResource(R.drawable.bottom_top_line1);
 			group.setBackgroundResource(R.drawable.bottom_top_line1);
 			company.setBackgroundResource(R.drawable.bottom_line1);//设置背景底线变色
+            friImage.setImageResource(R.drawable.friend_iamge_press);
 			textListName.setText(R.string.str_fri_addresslist);
 			break;
 		case R.id.app_top_group:
@@ -322,6 +334,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			adresslist.setBackgroundResource(R.drawable.bottom_top_line1);
 			department.setBackgroundResource(R.drawable.bottom_top_line1);
 			company.setBackgroundResource(R.drawable.bottom_line1);//设置背景底线变色
+            friImage.setImageResource(R.drawable.friend_iamge_press);
 			textListName.setText(R.string.str_fri_group);
 			break;
 		case R.id.app_top_company:
@@ -329,9 +342,11 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			group.setBackgroundResource(R.drawable.bottom_top_line1);
 			adresslist.setBackgroundResource(R.drawable.bottom_top_line1);
 			department.setBackgroundResource(R.drawable.bottom_top_line1); //设置背景底线变色
+            friImage.setImageResource(R.drawable.friend_iamge_press);
 			textListName.setText(R.string.str_fri_list_company_name);
 			break;
 		case R.id.myemail_layout:
+            appImage.setImageResource(R.drawable.app_iamge_press);
 			initDialog = Tool.showProgressDialog(null,TabActivity.this , "正在加载,请稍候...");
 			initDialog.setCancelable(false);
 			//TODO 加载完成后 跳转"我的邮件"的界面
@@ -348,6 +363,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			}).start();
 			break;
 		case R.id.mymessage_layout:
+            appImage.setImageResource(R.drawable.app_iamge_press);
 			initDialog = Tool.showProgressDialog(null,TabActivity.this , "正在加载,请稍候...");
 			initDialog.setCancelable(false);
 			//TODO 加载完成后 跳转"我的消息"的界面
@@ -364,6 +380,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			}).start();
 			break;
 		case R.id.find_person_layout:
+            appImage.setImageResource(R.drawable.app_iamge_press);
 			initDialog = Tool.showProgressDialog(null,TabActivity.this , "正在加载,请稍候...");
 			initDialog.setCancelable(false);
 			//TODO 加载完成后 跳转"找人找群"的界面
@@ -380,11 +397,13 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			}).start();
 			break;
 		case R.id.user_layout:
+            setImage.setImageResource(R.drawable.settings_image_press);
 			Intent intent = new Intent();
 			intent.setClass(TabActivity.this, SettingActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.version_layout:
+            setImage.setImageResource(R.drawable.settings_image_press);
 			checkDialog = Tool.showProgressDialog(null,TabActivity.this , "正在检查更新");
 			checkDialog.setCancelable(false);
 			//TODO 检测版本更新  检测完成后 关掉dialog显示检测结果
@@ -401,6 +420,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			}).start();
 			break;
 		case R.id.notify_layout:
+            setImage.setImageResource(R.drawable.settings_image_press);
 			initDialog = Tool.showProgressDialog(null,TabActivity.this , "正在加载,请稍候...");
 			initDialog.setCancelable(false);
 			//TODO 加载完成跳转通知提醒界面
@@ -417,6 +437,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			}).start();
 			break;
 		case R.id.collect_layout:
+            setImage.setImageResource(R.drawable.settings_image_press);
 			initDialog = Tool.showProgressDialog(null,TabActivity.this , "正在加载,请稍候...");
 			initDialog.setCancelable(false);
 			//TODO 加载完成跳转个人收藏界面
@@ -433,6 +454,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			}).start();
 			break;
 		case R.id.safe_layout:
+            setImage.setImageResource(R.drawable.settings_image_press);
 			 final EditText inputServer = new EditText(this);
 		        inputServer.setFocusable(true);
 		        AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -445,6 +467,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 		        builder.show();
 			break;
 		case R.id.logout_layout:
+            setImage.setImageResource(R.drawable.settings_image_press);
 			dialogManager = new ExitDialogManager(TabActivity.this);
 			dialogManager.showExitDialog();
 			dialogManager.setCallBackClickListener(this);
@@ -462,7 +485,7 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 		Intent intent = new Intent();
-		String title = (String) deAdapater.getChild(groupPosition, childPosition);
+		String title = (String) deAdapter.getChild(groupPosition, childPosition);
 		intent.putExtra("title", title);
 		intent.setClass(TabActivity.this, ChatActivity.class);
 		startActivity(intent);
@@ -484,8 +507,18 @@ public class TabActivity extends Activity implements OnClickListener,OnItemClick
 			break;
 		}
 	}
-	
-	/**
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if(keyCode == KeyEvent.KEYCODE_BACK){
+            Intent intent = CommonsUtils.returnHomeActivity();
+            startActivity(intent);
+            return  false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
 	 * 导航栏图片切换暗色
 	 */
 	private void resetImage() {

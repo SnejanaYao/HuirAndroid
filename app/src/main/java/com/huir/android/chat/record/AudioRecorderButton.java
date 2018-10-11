@@ -1,14 +1,17 @@
-package com.huir.android.record;
+package com.huir.android.chat.record;
 
 import java.io.File;
 
+import com.huir.android.tool.CommonsUtils;
 import com.huir.test.R;
-import com.huir.android.record.AudioRecoderUtils.AudioStateListener;
+import com.huir.android.chat.record.AudioRecoderUtils.AudioStateListener;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -20,22 +23,32 @@ import android.widget.Button;
  * 
  */  
   
-@SuppressLint("AppCompatCustomView")  
-public class AudioRecorderButton extends Button implements AudioStateListener {
+@SuppressLint("AppCompatCustomView")
+public class AudioRecorderButton extends Button implements AudioStateListener{
 	private static final String TAG = "AudioRecorderButton";
+	private boolean bMute = true;
 	
 	private static final int STATE_NORMAL = 1;
 	private static final int STATE_RECORDING = 2;
 	private static final int STATE_WANT_CANCLE = 3;
 	private static final int Y_WANT_CANCLE=300;
+
 	private static final int MSG_AUDIO_PREPARED=0X110; 
 	private static final int MSG_VOICE_CHANGE=0X111;
 	private static final int MSG_DIALOG_DISMISS=0X112;
+
 	private float time=0;
 	private int STATE_CHANGE = STATE_NORMAL;
+	private int i = 0;
+
+    private String filename;
+
 	private boolean isRecording;
 	private boolean ready; //是否触发longClick
-	private String filename;
+    private boolean isReady;// 是否有录音权限
+
+
+	private Context context;
 	
 	private DialogManager dialogManager;
 	private AudioRecoderUtils audioManager;
@@ -46,9 +59,10 @@ public class AudioRecorderButton extends Button implements AudioStateListener {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AudioRecorderButton(Context context, AttributeSet attrs) {
+    public AudioRecorderButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		dialogManager = new DialogManager(context);
+        this.context =context;
 		fileName();
 		filename = "/sdcard/DownLoad/com.huir.download/Record";
 		audioManager = AudioRecoderUtils.getInstance(filename);
@@ -57,9 +71,13 @@ public class AudioRecorderButton extends Button implements AudioStateListener {
 			
 			@Override
 			public boolean onLongClick(View v) {
-				Log.e(TAG, "进入长按");
-				ready = true;
-				audioManager.prepareAudio();
+                Log.e(TAG, "进入长按" );
+				//TODO 判断是否有录音权限
+                Integer version = CommonsUtils.getMobileSystemVersion();
+                Log.e(TAG, "onLongClick: isReady?   " + isReady  +"  system version is " + version);
+                ready =true;
+                audioManager.prepareAudio();
+                CommonsUtils.muteAudioFocus(context,bMute); //按下时关闭背景音乐
 				return false;
 			}
 		});
@@ -94,7 +112,7 @@ public class AudioRecorderButton extends Button implements AudioStateListener {
 				try {
 					Thread.sleep(100);
 					time += 0.1f;//进入线程 计时
-					mHandlr.sendEmptyMessage(MSG_VOICE_CHANGE);
+                    mHandlr.sendEmptyMessage(MSG_VOICE_CHANGE);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -141,6 +159,7 @@ public class AudioRecorderButton extends Button implements AudioStateListener {
 			}
 			break;
 		case MotionEvent.ACTION_UP:
+            Log.e(TAG, "onTouchEvent:  time " + time );
 				if(!ready) { //没有进入长按事件
 					reset();
 					return super.onTouchEvent(event);
@@ -150,7 +169,7 @@ public class AudioRecorderButton extends Button implements AudioStateListener {
 					audioManager.cancel();
 					mHandlr.sendEmptyMessageDelayed(MSG_DIALOG_DISMISS, 1300);
 					
-				}else if(STATE_CHANGE == STATE_RECORDING) {
+				}else if(STATE_CHANGE == STATE_RECORDING && time <=60f) {
 					dialogManager.dismissDialog();
 					audioManager.release();
 					if(audioListener != null) {
@@ -160,7 +179,13 @@ public class AudioRecorderButton extends Button implements AudioStateListener {
 					dialogManager.dismissDialog();
 					audioManager.release();
 					audioManager.cancel();
-				}
+				}else if(time > 60f){
+                    dialogManager.tooLong();
+                    audioManager.cancel();
+                    mHandlr.sendEmptyMessageDelayed(MSG_DIALOG_DISMISS, 1300);
+                }
+            bMute = false;
+            CommonsUtils.muteAudioFocus(context,bMute);  //松开按钮时恢复背景音乐
 			reset();
 			break;
 		}
@@ -172,6 +197,7 @@ public class AudioRecorderButton extends Button implements AudioStateListener {
 	 */
 	private void reset() {
 		isRecording=false;
+		bMute =true;
 		changState(STATE_NORMAL);
 		time = 0;
 	}
@@ -223,6 +249,18 @@ public class AudioRecorderButton extends Button implements AudioStateListener {
 		   file.mkdir();
 	   }
    }
-   
-   
-}  
+
+    /**
+     * 判断6.0及以上的安卓版本是否有录音权限
+     * @return boolean
+     */
+    private  boolean voicePermission(){
+        Log.e(TAG, "voicePermission:  context is  "+ context);
+        return (PackageManager.PERMISSION_GRANTED ==   ContextCompat.checkSelfPermission(context, android.Manifest.permission.RECORD_AUDIO));
+    }
+
+    @Override
+    public void setOnTouchListener(OnTouchListener l) {
+        super.setOnTouchListener(l);
+    }
+}

@@ -1,4 +1,4 @@
-package com.huir.android.record;
+package com.huir.android.chat.record;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -12,10 +12,19 @@ import android.util.Log;
  *
  */
 public class MediaManager {
+    private static MediaManager mediaManager;
 	private static final String TAG="MediaManager";
 	private static MediaPlayer mediaPlayer;
 	private static boolean isPuse;
-	public static void playSound(String path,OnCompletionListener onCompletionListener) {
+
+    public static MediaManager getInstance() {
+        if(mediaManager == null){
+            mediaManager = new MediaManager();
+        }
+        return mediaManager;
+    }
+
+    public void playSound(String path, OnCompletionListener onCompletionListener) {
 		if(mediaPlayer ==null) {
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setOnErrorListener(new OnErrorListener() {
@@ -39,7 +48,7 @@ public class MediaManager {
 		}
 	}
 	
-	public static void pause() {
+	public void pause() {
 		if(mediaPlayer !=null && mediaPlayer.isPlaying()) {
 			mediaPlayer.pause();
 			isPuse= true;
@@ -53,11 +62,23 @@ public class MediaManager {
 		}
 	}
 	
-	public static void release() {
+	public  void release() {
 		if(mediaPlayer !=null ) {
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
 	}
-	
+
+	public void  stop(){
+        if(mediaPlayer != null ||  mediaPlayer.isPlaying()){
+            mediaPlayer.stop();
+        }
+    }
+
+    public boolean isplaying(){
+        if(mediaPlayer.isPlaying()){
+            return  true;
+        }
+        return  false;
+    }
 }

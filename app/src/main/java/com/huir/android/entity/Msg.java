@@ -116,4 +116,10 @@ public class Msg {
 		this.type = type;
 	}
 
+	public  Msg(String msg,String path, int type){
+        this.msg = msg;
+        this.type = type;
+        this.path = path;
+    }
+
 }

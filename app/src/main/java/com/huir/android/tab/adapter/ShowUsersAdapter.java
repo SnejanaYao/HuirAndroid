@@ -1,4 +1,4 @@
-package com.huir.android.tab;
+package com.huir.android.tab.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +20,21 @@ import android.widget.TextView;
  * @author huir316
  *
  */
-public class ShowUsersAdapater extends BaseAdapter {
+public class ShowUsersAdapter extends BaseAdapter {
 	private ViewHolder viewHolder;
 	private List<UserShow> datas = new ArrayList<UserShow>();
 	private Context context;
 	
-	public ShowUsersAdapater(List<UserShow> datas, Context context) {
+	public ShowUsersAdapter(List<UserShow> datas, Context context) {
 		super();
 		this.datas = datas;
 		this.context = context;
 	}
+
+    public ShowUsersAdapter(Context context) {
+        super();
+        this.context = context;
+    }
 
 	//给adapter添加数据
 	public void addDataToAdapter(UserShow user) {

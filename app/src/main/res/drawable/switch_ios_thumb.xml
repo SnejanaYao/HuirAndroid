@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <!-- 填充的颜色 -->
+    <solid android:color="@color/colorWhite" />
+    <size android:width="25dp" android:height="25dp" />
+    <!--边框的宽度及颜色-->
+    <stroke android:width="3dp" android:color="#00000000" />
+</shape>
+
+
+

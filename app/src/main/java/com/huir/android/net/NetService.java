@@ -15,6 +15,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 
+import com.huir.android.message.MsgDispatcher;
+import com.huir.android.message.ServerRequest;
+
 public class NetService extends Service {
 	private String TAG = "NetService";
 	private String THR = "Thread";
@@ -30,13 +33,14 @@ public class NetService extends Service {
 	private Socket socket;
 	private InputStream inPut;
 	private OutputStream outPut;
-		
-	private byte command;
+
+	private int command;   // private byte command;
 	private int str_length;
 	private int all_length;
 	private String  msg;
 	
 	private NetBroad netBroad = new NetBroad();
+
 	@Override
 	public IBinder onBind(Intent intent) {
 			return null;
@@ -49,6 +53,7 @@ public class NetService extends Service {
 		flag103=true;
 		if(flagConnect) {
 			if(canSend) {
+			    mHandlr.sendEmptyMessage(ConnectAPI.STATE_SEND); //修改
 				Log.e(TAG, "can  send message ......");
 			}else {
 				Log.e(TAG, "cant send message ......");
@@ -66,10 +71,9 @@ public class NetService extends Service {
 		Log.e(TAG, "onCreate");
 		super.onCreate();
 		connection(ADRESS, PORT);
-		
 		IntentFilter mFilter = new IntentFilter();
-		mFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-		registerReceiver(netBroad, mFilter);
+        mFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netBroad, mFilter);
 	}
 	
 	@Override
@@ -92,8 +96,10 @@ public class NetService extends Service {
 			public void run() {
 				try {
 					//建立socket连接
-					SocketAddress socketAddress = new InetSocketAddress(ip, port);
-					socket.connect(socketAddress);
+					Socket socket = init(ip, port);
+                    if(socket !=null && socket.isConnected()){
+                       mHandlr.sendEmptyMessage(ConnectAPI.STATE_CONNECT);
+                    }
 				} catch (Exception e) {
 					Log.e(TAG, "建立连接失败.....");
 				}
@@ -115,14 +121,14 @@ public class NetService extends Service {
 		SocketAddress socketAddress = new InetSocketAddress(ip, port);
 		socket = new Socket();
 		socket.connect(socketAddress);
-		socket.setKeepAlive(true);//开启保持活动状态的套接字  
+		socket.setKeepAlive(true);//开启保持活动状态的套接字
 		socket.setSoTimeout(30);//设置超时时间
 		}catch (Exception e) {
 			Log.e(THR, " 建立连接失败.......");
 		}
 		return socket;
 	}
-		
+
 	private void deCode() {
 		new Thread() {
 			@Override
@@ -134,7 +140,7 @@ public class NetService extends Service {
 							sleep(1000);
 							inPut = socket.getInputStream();
 							int len  = inPut.available();
-							if(len<0) {
+							if(len==0) {
 								sleep(3000);
 							}else {
 								Log.e(THR,len+"");
@@ -178,6 +184,7 @@ public class NetService extends Service {
 											String str = new String(tempb,2,str_length,"utf-8");
 											int lenlne = Integer.parseInt(str);
 											all_length = 2+str_length+lenlne;
+
 											Log.e(THR,"  command ["+command+"] str_length[" + str_length+"] lenlen[" +lenlne+"]");
 											if(all_length >len) {
 												sleep(1000);
@@ -189,14 +196,18 @@ public class NetService extends Service {
 												continue turn01;
 											}
 											msg = new String(tempb,2+str_length,lenlne,"utf-8");
+											//TODO 取得消息后操作
+											ServerRequest request = new ServerRequest(command,msg);
+											MsgDispatcher msgDispatcher = new MsgDispatcher();
+											msgDispatcher.getMsgDispatcher(request);
 											Log.e(THR,"  mgs "+msg);
 											flag103 = false;
-												
+
 											if(all_length<len) {
 												sleep(1000);
 												Log.e(THR ,"粘包了...实际读到的数据就只有["+all_length+"] 读到的字节数组长度为 ["+len+"]");//读多了
 												byte[] more = new byte[len-all_length]; //原先长度 减去 读取到的所有字节长度 即为 粘包了的包长度
-												byte[] t = tempb;  
+												byte[] t = tempb;
 												System.arraycopy(t,all_length,more,0,more.length); //浅复制
 												tempb = more;
 												len = len - all_length;
@@ -214,7 +225,7 @@ public class NetService extends Service {
 				}
 			}.start();
 	}
-		
+
 		
 		private Handler mHandlr = new Handler() {
 			public void handleMessage(Message msg) {

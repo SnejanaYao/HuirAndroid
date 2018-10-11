@@ -10,8 +10,6 @@ import java.io.File;
 
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * 异步图片加载
@@ -19,29 +17,28 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  *
  */
 public class ImageAsy extends AsyncTask<String, Integer, String> {
+    private static final  String TAG = "ImageAsy";
+    private ImageAsy imageAsy;
+
     private Context context;
     private ImageView imageView;
+
+    private BitMapListener bitMapListener;
     private Bitmap bitmap;
-    private PhotoView photoView;
+    private  String name;
+    private String path;
 
-    public void setBitmap(Bitmap bitmap){
-        this.bitmap = bitmap;
-    }
-
-    public Bitmap getBitmap() {
-        return this.bitmap;
-    }
     public ImageAsy(){}
 
-    public ImageAsy(Context context, ImageView imageView,PhotoView photoView){
+    public ImageAsy(Context context, ImageView imageView,String path){
         this.context = context;
         this.imageView = imageView;
-        this.photoView = photoView;
+        this.path = path;
     }
 
     @Override
     protected String doInBackground(String... sUrl) {
-        File file = new File("/sdcard/Pictures/huir/test.jpg");
+        File file = new File(path);
         String fileName = file.getAbsolutePath();
         if(!file.exists()){
             file.mkdirs();
@@ -58,16 +55,14 @@ public class ImageAsy extends AsyncTask<String, Integer, String> {
 
             @Override
             public void onSuccess(File file) {
-                String name =  "/data/data/com.huir.test/cache/luban_disk_cache/1528697134546";
+                String name = file.getAbsolutePath();
                 Log.e("Success",name);
-                Bitmap bitmap = BitmapFactory.decodeFile(name);
-                int width  = bitmap.getWidth();
-                int height = bitmap.getHeight();
+                bitmap = BitmapFactory.decodeFile(name);
                 Log.e("file mber",bitmap.getWidth() + "*" + bitmap.getHeight() + "-->" + bitmap.getByteCount() +"--? path   " +name);
-                if(bitmap != null && photoView !=null){
+                if(bitmap != null && imageView !=null){
                     Log.e("bitmap"," != null");
-                    photoView.setImageBitmap(bitmap);
-                    setBitmap(bitmap);
+                    imageView.setImageBitmap(bitmap);
+                    bitMapListener.getBitMap(name);
                 }else{
                     Log.e("bitmap"," == null");
                 }
@@ -86,7 +81,6 @@ public class ImageAsy extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
     	super.onPostExecute(result);
-
     }
 
     @Override
@@ -97,5 +91,21 @@ public class ImageAsy extends AsyncTask<String, Integer, String> {
     @Override
     protected void onProgressUpdate(Integer... progress) {
         super.onProgressUpdate(progress);
+    }
+
+
+    /**
+     * 接口回调
+     * @author huir316
+     *
+     */
+    public static  interface BitMapListener {
+        void getBitMap(String path);
+    };
+
+    public void setBitMapListener(BitMapListener bitMapListener) {
+        if(bitMapListener !=null) {
+            this.bitMapListener = bitMapListener;
+        }
     }
 }

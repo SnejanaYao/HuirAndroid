@@ -1,4 +1,4 @@
-package com.huir.android.tab;
+package com.huir.android.tab.setting.dialog;
 
 import com.huir.test.R;
 
@@ -20,13 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 /**
- * 退出登录模块的Dialog显示
+ * 出生日期模块的Dialog显示
  * @author huir316
  *
  */
 public class BornDialogManager implements OnClickListener{
-	private SpinnerCallBackClickListener spinnerBackClickListener;
-	private ArrayAdapter<CharSequence> adapter;
+	private BornSpinnerCallBackClickListener spinnerBackClickListener;
+    private ArrayAdapter<CharSequence> adapter;
 	
 	private boolean isLeapYear;
 	
@@ -107,14 +107,15 @@ public class BornDialogManager implements OnClickListener{
 		
 		cancleBtn = (Button) dialog.findViewById(R.id.born_cancel_btn);
 		cancleBtn.setOnClickListener(this);
-		
+
+		dialog.setCancelable(false);
 		dialog.show();
 	}
 	
 	/**
 	 * 销毁dialog
 	 */
-	public void dimissBornDialog() {
+	public void dismissBornDialog() {
 		if(dialog!=null && dialog.isShowing()) {
 			dialog.dismiss();
 		}
@@ -201,8 +202,8 @@ public class BornDialogManager implements OnClickListener{
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				// TODO 获取下拉框选中的值
-				String days = (String) daySp.getSelectedItem();
-				intDays = Integer.parseInt(days);
+                String days = (String) daySp.getSelectedItem();
+                intDays = Integer.parseInt(days);
 			}
 		});
 		
@@ -214,11 +215,11 @@ public class BornDialogManager implements OnClickListener{
 	 * @author huir316
 	 *
 	 */
-	public interface SpinnerCallBackClickListener {
+	public interface BornSpinnerCallBackClickListener {
 		void click(View view,Integer yr,Integer mth,Integer day);
 	};
 
-	public void setCallBackClickListener(SpinnerCallBackClickListener spinnerBackClickListener) {
+	public void setBornCallBackClickListener(BornSpinnerCallBackClickListener spinnerBackClickListener) {
 		if(spinnerBackClickListener !=null) {
 			this.spinnerBackClickListener = spinnerBackClickListener;
 		}

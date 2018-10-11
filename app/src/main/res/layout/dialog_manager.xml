@@ -76,6 +76,30 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"/>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/dm_rl_bg4"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
+        android:background="@drawable/yuyin_gantanhao"
+        >
+
+        <TextView
+            android:id="@+id/dm_tv_txt4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
+            android:text="@string/str_recorder_too_long"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"/>
+    </RelativeLayout>
 </RelativeLayout>
 
 

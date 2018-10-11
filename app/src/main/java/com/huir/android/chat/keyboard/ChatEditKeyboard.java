@@ -1,6 +1,6 @@
 package com.huir.android.chat.keyboard;
 
-import com.huir.android.chat.ChatViewAdapter;
+import com.huir.android.chat.adapter.ChatViewAdapter;
 import com.huir.android.entity.Msg;
 
 import android.annotation.SuppressLint;

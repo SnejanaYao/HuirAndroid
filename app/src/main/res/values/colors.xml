@@ -5,8 +5,11 @@
     <color name="colorAccent">#FF4081</color>
 	<color name="colorBlue">#00BFFF</color>
     <color name="colorGray">#999999</color>
+    <color name="colorLightGray">#aaa</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorSelBgm">#272828</color>
+    <color name="colorSelImage">#373c3d</color>
     <color name="colorRed">#9d0a0f</color>
     <color name="colorLightRed">#ee1d24</color>
     <color name="colorCloseWhite">#fafafa</color>
@@ -15,4 +18,7 @@
     <color name="colorBorderLine">#e0e0e0</color>
     <color name="colorVoiceNumber">#686666</color>
     <color name="colorTitleBackGround">#00BFFF</color>
+    <color name="colorIOSGreen">#4EDA62</color>
+    <color name="colorBabyGrey">#E3E3E3</color>
+    <color name="colorGreenDark">#ff669900</color>
 </resources>

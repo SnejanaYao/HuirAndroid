@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 
 /**
  * 弹框工具类
@@ -35,6 +36,8 @@ public class Tool {
 		Matcher m_userPwd = userPwd.matcher(isCheck_pwd);
 		return m_userPwd.matches();
 	}
+
+
 	
 	/**
 	 * 登录弹框
@@ -122,7 +125,7 @@ public class Tool {
     } 
     
 	/**
-	 * 注册成功弹框
+	 * 出生日期选择成功弹框
 	 * @param context
 	 */
 	public static void showBornSureDialog(Context context,Integer yr,Integer mth,Integer day) {
@@ -138,4 +141,22 @@ public class Tool {
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
+
+    /**
+     * 所在地选择成功弹框
+     * @param context
+     */
+    public static void showAreaSureDialog(Context context,String country,String provice,String city) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("系统通知");
+        builder.setMessage("您的所在地是["+country+"-"+provice+"-"+city+"]");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }

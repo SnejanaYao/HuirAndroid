@@ -1,8 +1,10 @@
 package com.huir.android.tab.setting;
 
+import com.huir.android.tab.setting.dialog.AreaDialogManager;
+import com.huir.android.tab.setting.dialog.AreaDialogManager.AreaSpinnerCallBackClickListener;
 import com.huir.test.R;
-import com.huir.android.tab.BornDialogManager;
-import com.huir.android.tab.BornDialogManager.SpinnerCallBackClickListener;
+import com.huir.android.tab.setting.dialog.BornDialogManager;
+import com.huir.android.tab.setting.dialog.BornDialogManager.BornSpinnerCallBackClickListener;
 import com.huir.android.tool.KeyboardUtil;
 import com.huir.android.tool.Tool;
 
@@ -11,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -25,7 +28,7 @@ import android.widget.RelativeLayout;
  */
 public class SettingActivity extends Activity  implements OnClickListener{
 	private BornDialogManager bornDialogManager;
-	
+	private AreaDialogManager areaDialogManager;
 	
 	private Button returnBack;
 	private RelativeLayout userLayout;
@@ -37,6 +40,7 @@ public class SettingActivity extends Activity  implements OnClickListener{
 	private RelativeLayout emailLayout;
 	private RelativeLayout adressLayout;
 	private RelativeLayout bornLayout;
+	private RelativeLayout areaLayout;
 	
 	
 	private static final int USER=1;
@@ -66,16 +70,19 @@ public class SettingActivity extends Activity  implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);//设置窗口没有标题栏  
-		if(VERSION.SDK_INT>= VERSION_CODES.KITKAT) {  
-	          getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);  //透明状态栏  
-	          getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);   //透明导航栏  
-	     }
+        config();
 		View contentView = getLayoutInflater().inflate(R.layout.activity_personal_info, null);
 		setContentView(contentView);
 		new KeyboardUtil(this, contentView); 
 		initView();
 	}
+
+	private  void  config(){
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//设置窗口没有标题栏
+        if(VERSION.SDK_INT>= VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);  //透明状态栏
+        }
+    }
 
 	private void initView() {
 		returnBack = (Button) findViewById(R.id.personal_chat_return);
@@ -107,6 +114,9 @@ public class SettingActivity extends Activity  implements OnClickListener{
 		
 		bornLayout = (RelativeLayout) findViewById(R.id.personal_born_layout);
 		bornLayout.setOnClickListener(this);
+
+        areaLayout = (RelativeLayout) findViewById(R.id.personal_area_layout);
+        areaLayout.setOnClickListener(this);
 	}
 
 	@Override
@@ -142,22 +152,39 @@ public class SettingActivity extends Activity  implements OnClickListener{
 		case R.id.personal_born_layout:
 			bornDialogManager = new BornDialogManager(SettingActivity.this);
 			bornDialogManager.showBornDialog();
-			bornDialogManager.setCallBackClickListener(new SpinnerCallBackClickListener() {
-
-				@Override
-				public void click(View view, Integer yr, Integer mth, Integer day) {
-					// TODO 点击事件监听
-					switch (view.getId()) {
-					case R.id.born_save_btn:
-						Tool.showBornSureDialog(SettingActivity.this, yr, mth, day);
-						bornDialogManager.dimissBornDialog();
-						break;
-					case R.id.born_cancel_btn:
-						bornDialogManager.dimissBornDialog();
-						break;
-					}
-				}
-			});
+			bornDialogManager.setBornCallBackClickListener(new BornSpinnerCallBackClickListener() {
+                @Override
+                public void click(View view, Integer yr, Integer mth, Integer day) {
+                    // TODO 点击事件监听
+                    switch (view.getId()) {
+                        case R.id.born_save_btn:
+                            Tool.showBornSureDialog(SettingActivity.this, yr, mth, day);
+                            bornDialogManager.dismissBornDialog();
+                            break;
+                        case R.id.born_cancel_btn:
+                            bornDialogManager.dismissBornDialog();
+                            break;
+                    }
+                }
+            });
+			break;
+		case R.id.personal_area_layout:
+            areaDialogManager  = new AreaDialogManager(SettingActivity.this);
+            areaDialogManager.showAreaDialog();
+            areaDialogManager.setAreaCallBackClickListener(new AreaSpinnerCallBackClickListener() {
+                @Override
+                public void click(View view, String strCountry,String strProvice, String strCity) {
+                    switch (view.getId()){
+                        case R.id.area_save_btn:
+                            Tool.showAreaSureDialog(SettingActivity.this,strCountry,strProvice,strCity);
+                            areaDialogManager.dismissBornDialog();
+                            break;
+                        case R.id.area_cancel_btn:
+                            areaDialogManager.dismissBornDialog();
+                            break;
+                    }
+                }
+            });
 			break;
 		}
 	}

@@ -1,4 +1,4 @@
-package com.huir.android.tab;
+package com.huir.android.tab.adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import android.widget.TextView;
  * @author huir316
  *
  */
-public class DeExpandableAdapater extends BaseExpandableListAdapter{
+public class DeExpandableAdapter extends BaseExpandableListAdapter{
 	private Map<String, List<String>> dataset = new HashMap<>();
 	private String[] parentList = new String[]{"first", "second", "third"};  
 	private List<String> childrenList1 = new ArrayList<>();  
@@ -29,7 +29,7 @@ public class DeExpandableAdapater extends BaseExpandableListAdapter{
 	
 	private ViewHolder viewHolder;
 	private Context context;
-	public DeExpandableAdapater(Context context) {
+	public DeExpandableAdapter(Context context) {
 		super();
 		//TODO 暂时先实验数据
 		initialData();

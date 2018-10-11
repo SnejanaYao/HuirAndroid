@@ -1,4 +1,4 @@
-package com.huir.android.record;
+package com.huir.android.chat.record;
 
 import java.io.File;
 import java.util.UUID;
@@ -65,31 +65,31 @@ public class AudioRecoderUtils {
 	
 	
 	public void prepareAudio() {
-		try {
-			isPrepared = false;
-			File dir = new File(mDir);
-			if(!dir.exists()) {
-				dir.mkdirs();
-			}
-			String fileName = generateFile();
-			File file = new File(mDir,fileName);
-			mCurrentFilePath = file.getAbsolutePath(); //获取绝对路径
-			mediaRecorder = new MediaRecorder();
-			mediaRecorder.setOutputFile(file.getAbsolutePath()); //输出文件
-			mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //音频源麦克风 
-			mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR); //音频文件格式
-			mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-			mediaRecorder.prepare();
-			mediaRecorder.start();
-			isPrepared = true;
-			if(mListener != null) {
-				mListener.wellPrepared();
-			}
-		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
-		}
-	}
-	
+        try {
+            isPrepared = false;
+            File dir = new File(mDir);
+            if(!dir.exists()) {
+                dir.mkdirs();
+            }
+            String fileName = generateFile();
+            File file = new File(mDir,fileName);
+            mCurrentFilePath = file.getAbsolutePath(); //获取绝对路径
+            mediaRecorder = new MediaRecorder();
+            mediaRecorder.setOutputFile(file.getAbsolutePath()); //输出文件
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //音频源麦克风
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR); //音频文件格式
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+            isPrepared = true;
+            if(mListener != null) {
+                mListener.wellPrepared();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
 	/**
 	 * 随即生成文件名称
 	 * @return
@@ -107,7 +107,8 @@ public class AudioRecoderUtils {
 		if(isPrepared) {
 			try {
 				//mediaRecorder.getMaxAmplitude()/32768   1-32767
-				int sound = maxLevel * mediaRecorder.getMaxAmplitude()/2000+1;
+				int sound = 5 * mediaRecorder.getMaxAmplitude()/2000+1;
+                Log.e(TAG, "getLevel: " + sound );
 				if(sound > 0) {
 					return sound;
 				}
@@ -138,7 +139,13 @@ public class AudioRecoderUtils {
 		}
 	}
 
+    /**
+     * 获取录音完成的保存路径
+     * @return
+     */
 	public String getCurrentFilePath() {
 		return mCurrentFilePath;
 	}
+
+
 }
