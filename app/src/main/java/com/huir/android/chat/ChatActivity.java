@@ -2,6 +2,7 @@ package com.huir.android.chat;
 
 import com.huir.android.chat.adapter.ChatViewAdapter;
 import com.huir.android.chat.record.MediaManager;
+import com.huir.android.entity.Image;
 import com.huir.android.tool.CommonsUtils;
 import com.huir.test.R;
 import com.huir.android.chat.download.DownloadFile;
@@ -27,6 +28,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -176,11 +178,7 @@ public class ChatActivity extends Activity implements OnClickListener,PhotoViewC
 					 left.setBackgroundDrawable(gd);
 			    }
 			}else{
-			    //图片
-                /*Intent i = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);//调用android的图库
-                startActivityForResult(i, 2);*/
-                startActivity(new Intent(context,SelectorViewActivity.class));
+                startActivityForResult(new Intent(context,SelectorViewActivity.class),2000);
             }
 			break;
 		case R.id.btn_right:
@@ -198,29 +196,11 @@ public class ChatActivity extends Activity implements OnClickListener,PhotoViewC
 		    }
 		  }else{
               //视频
-              /*Intent intentPic = new Intent(Intent.ACTION_GET_CONTENT);
-              intentPic.addCategory(Intent.CATEGORY_OPENABLE);
-              intentPic.setType("video/*;image/*");
-              startActivityForResult(intentPic,3);*/
+              //startActivityForResult(intentPic,3);
               break;
           }
 			break;
 		case R.id.btn_download:
-			//文件下载  (downLoadManager)
-			/*String url= "http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@900w_1l_2o_100sh.jpg";//下载地址
-			DownloadManager.Request request= new DownloadManager.Request(Uri.parse(url)); //获取DownloadManager的下载
-			request.setTitle("Andorid下载管理");
-			// 如果为了让它运行，你必须用  android   3.2编译你的应用程序
-			if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.HONEYCOMB) {
-			    request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
-			    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-			}
-			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS+"/com.android.first/", "test.jpg");
-			// 获得下载服务和队列文件
-			DownloadManager manager= (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-			Long id = manager.enqueue(request);
-            listener(id);*/
-			
 			dialog = new ProgressDialog(context);
 			dialog.setMessage("正在下载...");
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -245,7 +225,8 @@ public class ChatActivity extends Activity implements OnClickListener,PhotoViewC
         switch (view.getId()){
             case R.id.chat_image_show:
                 Log.e(TAG,"进入");
-                if(path != null){
+                Log.e(TAG, "click:  path "  +  path);
+               if(path != null){
                     Log.e(TAG,"path !=null");
                     Intent intent = new Intent();
                     intent.setClass(context,PhotoViewActivity.class);
@@ -277,29 +258,35 @@ public class ChatActivity extends Activity implements OnClickListener,PhotoViewC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        Log.e(TAG, "onActivityResult: is in  " );
         if(data != null){
-            switch (requestCode){
-                case 0:
-                    break;
-                case 2:
-                    if(resultCode == Activity.RESULT_OK) {
-                        Uri uri = data.getData();
-                        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-                        cursor.moveToFirst();
-                        String path = cursor.getString(1);
-                        cursor.close();
-                        chatViewAdapter.addDataToAdapter(new Msg(null, path, 4));
-                        chatViewAdapter.notifyDataSetChanged();
-                        clist.smoothScrollToPosition(clist.getCount() - 1);
-                        et_meg.setText("");
-                        chatViewAdapter.setCallBackClickListener(this);
-                    }else if(resultCode == Activity.RESULT_CANCELED){
-
+            if(requestCode == 2000){
+                boolean sendPhoto = data.getBooleanExtra("sendPhoto", false);
+                ArrayList<Image> images = data.getParcelableArrayListExtra("resultImages");
+                if(sendPhoto){
+                    if(images != null && images .size()>0){
+                        Log.e(TAG, "onActivityResult:  out of case 2's  if     sendPhoto  is "   +  sendPhoto);
+                        for(Image image: images){
+                            chatViewAdapter.addDataToAdapter(new Msg(null, image.getPath(), 4) );
+                            chatViewAdapter.notifyDataSetChanged();
+                            clist.smoothScrollToPosition(clist.getCount() - 1);
+                            et_meg.setText("");
+                            chatViewAdapter.setCallBackClickListener(this);
+                        }
                     }
-                    break;
+                }else return;
+            }else {
+                Log.e(TAG, "onActivityResult:  don't send the list" );
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
+    protected void onResume() {
+        Log.e(TAG, "onResume: "     );
+        super.onResume();
     }
 
     public static AnimationDrawable getAnimation() {
@@ -380,26 +367,6 @@ public class ChatActivity extends Activity implements OnClickListener,PhotoViewC
         public void afterTextChanged(Editable s) {
 
         }
-    }
-
-    /**
-     * downloadManager 监听事件
-     * @param Id
-     */
-    private void listener(final long Id) {
-        // 注册广播监听系统的下载完成事件。
-        IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                long ID = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                if (ID == Id) {
-                    Toast toast=Toast.makeText(context,"下载文件目录在: 手机存储/"+Environment.DIRECTORY_DOWNLOADS+"/com.android.first",Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-        };
-        registerReceiver(broadcastReceiver, intentFilter);
     }
 }
 

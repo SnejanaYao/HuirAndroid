@@ -21,8 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.huir.android.chat.adapter.ImageViewAdapter;
 import com.huir.android.chat.adapter.PreviewPageViewAdapter;
+import com.huir.android.chat.transmission.BigDataTransmission;
 import com.huir.android.entity.Image;
 import com.huir.test.R;
 
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class PreviewPicturesActivity extends AppCompatActivity implements  ViewPager.OnPageChangeListener {
     private static final String TAG = "PreviewPicturesActivity";
     public int positions;
+    private boolean previewConfirm = false;
     private boolean isShowBar = true;  //默认状态栏等为显示状态
     private Image image;
     private ArrayList<Image> mImages;
@@ -41,8 +42,10 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
     private ArrayList<Image> mSelectedImages = new ArrayList<>();
     private PreviewPageViewAdapter viewAdapter;
 
-    private ImageViewAdapter imageViewAdapter = new ImageViewAdapter();
 
+    public void setMImages(ArrayList<Image> mImages){
+        this.mImages = mImages;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +61,6 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
             image = mImages.get(positions);
             changeSelect(image); //初始化选中效果
         }
-
     }
 
     /**
@@ -66,11 +68,9 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
      */
     private void getPassOnObj() {
         Bundle bundle = getIntent().getExtras();
-        mImages = SelectorViewActivity.getInstance().getImages();
+        mImages = BigDataTransmission.getInstance().getList();
         mSelectedImages = bundle.getParcelableArrayList("selectImages");
         positions = bundle.getInt("position");
-        Log.e(TAG, "getPassOnObj List size : " + mImages.size()   );
-
     }
 
 
@@ -91,6 +91,7 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
     private TextView confirm;
 
     private LinearLayout fBack;
+    private LinearLayout isSend;
 
     private RelativeLayout topBar;
     private RelativeLayout bottomBar;
@@ -112,6 +113,9 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
 
         bottomBar = findViewById(R.id.rl_bottom_bar);
 
+        isSend = findViewById(R.id.rl_btn_confirm);
+        isSend.setEnabled(true);
+
         Resources resources = getResources();
         Bitmap selectBitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_image_select);
         isSelectDrawable = new BitmapDrawable(resources, selectBitmap);
@@ -125,7 +129,6 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
 
     private void initEvent() {
         unSelectedImage();
-
         number.setText((positions + 1) + "/" + mImages.size());
 
         fBack.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +137,22 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
                 finish();
             }
         });     //点击返回按钮 退出当前界面
+
+
+        isSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                previewConfirm = true;   // 点击确定按钮previewConfirm始终为true
+                Log.e(TAG, "onClick: " + mSelectedImages.size());
+                if( mSelectedImages.size() ==0){
+                    mSelectedImages.add(image);
+                }
+                setSelectImageCount(mSelectedImages.size());
+                changeSelect(image);
+                finish();
+
+            }
+        });
 
         viewAdapter = new PreviewPageViewAdapter(mImages, this);
         previewPager.setAdapter(viewAdapter);
@@ -162,15 +181,46 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
                         mSelectedImages.add(image);
                     }
                 }
-
-
                 image = (Image) mImages.get(previewPager.getCurrentItem());
                 changeSelect(image);
-
             }
         });
     };
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        number.setText((position+1)+"/"+mImages.size());   //刚刚点击时 显示张数比
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        number.setText((position+1)+"/"+mImages.size());
+        image = mImages.get(position);
+        changeSelect(image);
+        Log.e(TAG, "onPageSelected:   is  selected   "    + image .getPath() );  //滑动时 显示张数
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void finish() {
+        finishPageAndSend();
+        super.finish();
+    }
+
+    /**
+     * 当页面停止运行 带参数返回
+     */
+    private void finishPageAndSend(){
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra("previewSelectedImages",mSelectedImages);  //当前页面操作过的list
+        intent.putExtra("previewConfirm",previewConfirm); //是否点击发送
+        intent.setClass(getApplicationContext(),PreviewPicturesActivity.class);
+        setResult(10000,intent);
+    }
 
     /**
      * 改变是否选中状态
@@ -255,35 +305,5 @@ public class PreviewPicturesActivity extends AppCompatActivity implements  ViewP
         Drawable drawable = getResources().getDrawable(R.drawable.icon_image_un_select);
         drawable.setBounds(0, 0, 52, 52);    //TODO   测试大小。
         choice.setCompoundDrawables(drawable, null, null, null);   //设置未选择时的图片显示的大小
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        number.setText((position+1)+"/"+mImages.size());   //刚刚点击时 显示张数比
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        number.setText((position+1)+"/"+mImages.size());
-        image = mImages.get(position);
-        changeSelect(image);
-        Log.e(TAG, "onPageSelected:   is  selected   "    + image .getPath() );  //滑动时 显示张数
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
-    @Override
-    public void finish() {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        intent.putParcelableArrayListExtra("previewSelectedImages",mSelectedImages);
-        intent.setClass(getApplicationContext(),PreviewPicturesActivity.class);
-        intent.putExtras(bundle);
-        setResult(10000,intent);
-        Log.e(TAG, "this  page  is  finished  : " );
-        super.finish();
     }
 }

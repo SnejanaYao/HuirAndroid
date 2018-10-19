@@ -1,17 +1,19 @@
 package com.huir.android.chat.adapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bumptech.glide.Glide;
 import com.huir.android.chat.download.ImageAsy;
-import com.huir.android.chat.download.ImageAsy.BitMapListener;
+
+import android.util.Log;
 import android.view.View.OnClickListener;
 import com.huir.test.R;
 import com.huir.android.entity.Msg;
 import com.huir.android.tool.CommonsUtils;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-public class ChatViewAdapter extends BaseAdapter implements OnClickListener,BitMapListener {
+public class ChatViewAdapter extends BaseAdapter {
     private static final String  TAG = "ChatViewAdapter";
     private PhotoViewCallBackClickListener photoViewCallBackClickListener;
     private ImageAsy imageAsy ;
@@ -60,6 +62,7 @@ public class ChatViewAdapter extends BaseAdapter implements OnClickListener,BitM
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
+        Log.e(TAG, "getView: " + position );
 		if(convertView ==null) {
             convertView=LayoutInflater.from(context).inflate(R.layout.item_activity_chat,null);
             viewHolder = new ViewHolder(convertView);
@@ -86,10 +89,13 @@ public class ChatViewAdapter extends BaseAdapter implements OnClickListener,BitM
                 viewHolder.chat_left_voiceLine.setLayoutParams(ps);
                 break;
             case 4:
-                l_image();
-                imageAsy= new ImageAsy(context,viewHolder.image_show, entity.getPath());
-                imageAsy.setBitMapListener(this);
-                imageAsy.execute();
+
+                showImage(entity,position);
+                 /*
+                    imageAsy = new ImageAsy(context,viewHolder.image_show,datas);
+                    imageAsy= new ImageAsy(context,viewHolder.image_show, getMsg.getPath());
+                    imageAsy.setBitMapListener(this);
+                    imageAsy.execute();*/
                 break;
         }
 		return convertView;
@@ -165,7 +171,31 @@ public class ChatViewAdapter extends BaseAdapter implements OnClickListener,BitM
         viewHolder.voiceLeft.setVisibility(View.INVISIBLE);
         viewHolder.left.setVisibility(View.INVISIBLE);
         viewHolder.right.setVisibility(View.INVISIBLE);
-        viewHolder.image_show.setOnClickListener(this);
+    }
+
+    /**
+     * 显示已经选中的图片
+     * @param entity   图片路径
+     * @param position  当前下标
+     */
+    private void showImage(Msg entity,int position){
+            Log.e(TAG, "getView:  !=  null" +new File(entity.getPath()).exists() );
+            l_image();
+            try{
+                Glide.with(viewHolder.image_show)
+                        .load(new File(entity.getPath()))
+                        .into(viewHolder.image_show);
+            }catch(Exception e){
+                Log.e(TAG, "showImage: "  + e.getStackTrace() );
+            }
+            viewHolder.image_show.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(photoViewCallBackClickListener !=null){
+                        photoViewCallBackClickListener.click(v,datas.get(position).getPath());
+                    }
+                }
+            });
     }
 
     /**
@@ -174,29 +204,13 @@ public class ChatViewAdapter extends BaseAdapter implements OnClickListener,BitM
      *
      */
     public interface PhotoViewCallBackClickListener {
-        void click(View view,String name);
+        //void click(View view,int position,List<Msg> mList);
+        void click(View view,String  path);
     };
 
     public void setCallBackClickListener(PhotoViewCallBackClickListener photoViewCallBackClickListener) {
         if(photoViewCallBackClickListener !=null) {
             this.photoViewCallBackClickListener = photoViewCallBackClickListener;
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(photoViewCallBackClickListener !=null){
-            photoViewCallBackClickListener.click(v,path);
-        }
-    }
-
-    @Override
-    public void getBitMap(String path) {
-        this.path = path;
-        if(this.path !=null){
-            Log.e(TAG,"path !=null");
-        }else{
-            Log.e(TAG,"path ==null");
         }
     }
 }

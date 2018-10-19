@@ -13,6 +13,7 @@ import android.util.Log;
 
 
 import com.huir.android.chat.ChatActivity;
+import com.huir.android.erro.CatchErroException;
 import com.huir.android.message.MsgDispatcher;
 import com.huir.android.net.NetService;
 import com.huir.android.tool.CommonsUtils;
@@ -33,9 +34,11 @@ public class PushApplication extends Application {
         super.onCreate();
         JPushInterface.setDebugMode(true);//正式版的时候设置false，关闭调试
         JPushInterface.init(this);
-        boolean booleans = JPushInterface.isPushStopped(this);
+      /*  boolean booleans = JPushInterface.isPushStopped(this);
         String id = JPushInterface.getRegistrationID(this);
-        Log.e(TAG, "设备ID "+id +"isPushStopped " + booleans);
+        Log.e(TAG, "设备ID "+id +"isPushStopped " + booleans);*/
+        /*CatchErroException catchErroException = CatchErroException.getInstance();
+        catchErroException.setHandler(this);  //开启全局异常抓取*/
         Intent start = new Intent(PushApplication.this, NetService.class); //开启网络连接服务以及网络状态广播
         startService(start);
         isStoppedOrStarted();

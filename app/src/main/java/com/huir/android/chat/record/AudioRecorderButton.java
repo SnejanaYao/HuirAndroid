@@ -64,8 +64,8 @@ public class AudioRecorderButton extends Button implements AudioStateListener{
 		dialogManager = new DialogManager(context);
         this.context =context;
 		fileName();
-		filename = "/sdcard/DownLoad/com.huir.download/Record";
-		audioManager = AudioRecoderUtils.getInstance(filename);
+		/*filename = "/sdcard/DownLoad/com.huir.download/Record";*/
+		audioManager = AudioRecoderUtils.getInstance(fileName().getAbsolutePath());
 		audioManager.setOnAudioStateListener(this);
 		setOnLongClickListener(new OnLongClickListener() {
 			
@@ -243,11 +243,12 @@ public class AudioRecorderButton extends Button implements AudioStateListener{
 	/**
 	 * 判断文件夹是否存在 不存在就新建
 	 */
-   public void fileName() {
-	   File file = new File("/sdcard/DownLoad/com.huir.download/Record");  
+   public File fileName() {
+	   File file = new File("/sdcard/DownLoad/com.huir.download/Record");
 	   if(!file.exists()) {
 		   file.mkdir();
 	   }
+	   return file;
    }
 
     /**

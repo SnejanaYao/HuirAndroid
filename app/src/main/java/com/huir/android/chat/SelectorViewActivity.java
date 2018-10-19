@@ -10,7 +10,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,12 +25,14 @@ import android.widget.Toast;
 
 import com.huir.android.chat.adapter.FolderAdapter;
 import com.huir.android.chat.adapter.ImageViewAdapter;
+import com.huir.android.chat.transmission.BigDataTransmission;
 import com.huir.android.chat.image.ImageModle;
 import com.huir.android.entity.Folder;
 import com.huir.android.entity.Image;
 import com.huir.android.tool.KeyboardUtil;
 import com.huir.test.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -47,20 +48,11 @@ public class SelectorViewActivity extends Activity implements OnClickListener{
     private ArrayList<Image> mImages = new ArrayList<>();
     private boolean applyLoadImage = false;
     private GridLayoutManager mLayoutManager;
+    private boolean sure = false;  // 是否确认发送图片
 
 
     private Intent intent;
     private Bundle bundle;
-
-    private static SelectorViewActivity selectorViewActivity;
-
-
-    public static  SelectorViewActivity getInstance(){
-        if(selectorViewActivity == null){
-            selectorViewActivity  = new SelectorViewActivity();
-        }
-        return selectorViewActivity;
-    }
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +68,6 @@ public class SelectorViewActivity extends Activity implements OnClickListener{
         getImage();
 
 	}
-
-    @Override
-    public void finish() {
-
-        super.finish();
-    }
 
     /**
      *Activity窗体基本配置
@@ -151,9 +137,19 @@ public class SelectorViewActivity extends Activity implements OnClickListener{
         sureFrameLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                sure = true;
+                Log.e(TAG, "onClick:  "  +  mImages.size()  );
+                ArrayList<Image> selectImages = mAdapter.getSelectImages();
+                checkList(selectImages);
+                Intent intent = new Intent();
+                intent.putParcelableArrayListExtra("resultImages",mAdapter.getSelectImages());
+                intent.putExtra("sendPhoto",sure);
+                intent.setClass(getApplicationContext(),ChatActivity.class);
+                setResult(2000,intent);
+                finish();  // 关闭此页面
             }
         });
+        sureFrameLayout.setEnabled(false);   //  设置一开始按钮不可点击。，
 
         folderFrameLayout = (FrameLayout) findViewById(R.id.selector_btn_folder);
         folderFrameLayout.setOnClickListener(new OnClickListener() {
@@ -202,12 +198,14 @@ public class SelectorViewActivity extends Activity implements OnClickListener{
             @Override
             public void OnItemClick(Image image, int position) {
                 Log.e(TAG, "OnItemClick: "+ image.toString() );
-                ArrayList<Image> selectImages = mAdapter.getSelectImages();   // 选择要发送出去的图片数组
+                ArrayList<Image> selectImages =mAdapter.getSelectImages();   // 选择要发送出去的图片数组
                 Log.e(TAG, "OnItemClick:   size  is   "  + selectImages.size() );
                 intent = new Intent();
                 bundle = new Bundle();
-                getInstance().setImages(mImages);   // 设置new过后的mImages 有值
-                //bundle.putParcelableArrayList("mImages",mImages);
+                PreviewPicturesActivity p = new PreviewPicturesActivity();
+                p.setMImages(mImages);
+                Log.e(TAG, "mImages:   size  is   "  + mImages.size() );
+                BigDataTransmission.getInstance().setImages(mImages);
                 bundle.putParcelableArrayList("selectImages",selectImages);
                 bundle.putInt("position",position);
                 String name = mImages.get(position).getName();
@@ -308,12 +306,16 @@ public class SelectorViewActivity extends Activity implements OnClickListener{
     private  void setSelectImageCount(int count){
         //TODO 预览 确定 文字的 显示改变
         if(count ==0){
+            sureFrameLayout.setEnabled(false);
             confirmText.setText("确定");
             previewText.setText("预览");
+
         }else if(count < 9){
+            sureFrameLayout.setEnabled(true);
             confirmText.setText("确定" +"("+count+"/9)");
             previewText.setText("预览"+"("+count+")");
         }else{
+            sureFrameLayout.setEnabled(true);
             confirmText.setText("确定(9)");
             previewText.setText("预览(9)");
         }
@@ -351,7 +353,7 @@ public class SelectorViewActivity extends Activity implements OnClickListener{
         });
     }
 
-    public void chakanfolder(){
+    public void checkoutFolder(){
         for (int i=0;i<mFolders.size();i++){
             Log.e(TAG, i + "文件名   " + mFolders.get(i).getName() );
         }
@@ -400,20 +402,61 @@ public class SelectorViewActivity extends Activity implements OnClickListener{
         super.onResume();
     }
 
+    private ArrayList<Image> resultImage;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 10000) {
-            mAdapter.notifyDataSetChanged();  // 刷新全部可见的item
-            ArrayList<Image> images = data.getParcelableArrayListExtra("previewSelectedImages");
-            setSelectImageCount(images.size());
-            mAdapter.setSelectImages(images);
-            if(images != null){
-                Log.e(TAG, "onActivityResult:   list   " + images.size() );
-            }else {
-                Log.e(TAG, "onActivityResult:   list  is  null  " );
+        if(data != null){//  判断data 是否有数据
+            if (resultCode == 10000) {  //判断是否是 PreviewPicturesActivity 传值
+                reFreshImages(data);
+               if(!data.getBooleanExtra("previewConfirm",false)){ //判断是否是选中不发送
+                   Log.e(TAG, "onActivityResult:   previewConfirm  is not true  ");
+                   mAdapter.notifyDataSetChanged();  // 刷新全部可见的item
+                   if(resultImage != null){
+                   }else {
+                       Log.e(TAG, "onActivityResult:   list  is  null  " );
+                   }
+               }else {//选中并发送
+                   sure = true;
+                   Log.e(TAG, "onActivityResult: send defult photo " );
+                   Intent intent = new Intent();
+                   intent.putParcelableArrayListExtra("resultImages",mAdapter.getSelectImages());
+                   intent.putExtra("sendPhoto",sure);
+                   intent.setClass(getApplicationContext(),ChatActivity.class);
+                   setResult(2000,intent);
+                   finish();  // 关闭此页面
+               }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * 更新ArrayList得值
+     * @param data 界面传值
+     */
+    public void reFreshImages(Intent data){
+        resultImage = data.getParcelableArrayListExtra("previewSelectedImages");
+        checkList(resultImage);
+        Log.e(TAG, "reFreshImages: " + resultImage.size() );
+        setSelectImageCount(resultImage.size());
+        mAdapter.setSelectImages(resultImage);
+    }
+
+
+    /**
+     * 确认图片是否存在于本地
+     * @param list   需确认的集合
+     */
+    private void checkList(ArrayList<Image> list){
+       try{
+           for (Image image:list){
+               if(!new File(image.getPath()).exists()){
+                   list.remove(image);
+               }
+           }
+       }catch (Exception e){
+           Log.e(TAG, "checkList: " + e.getStackTrace() );
+       }
     }
 }
 
